@@ -65,12 +65,14 @@ button{
   </div>
 </div>
 
-<audio autoplay loop>
-  <source src="https://open.spotify.com/track/1I31fccuIm50T5ZtWwBMJe?flow_ctx=57ecf962-5624-414a-8173-0a8002ba9f6c:1771540944&creation_point=https://open.spotify.com/track/1I31fccuIm50T5ZtWwBMJe#login?flow_ctx=57ecf962-5624-414a-8173-0a8002ba9f6c:1771540941">
+<audio id="song" loop>
+  <source src="WhatsApp Audio 2026-02-19 at 9.03.41 PM.mpeg">
 </audio>
+
 
 <script>
 function love(){
+  document.getElementById("song").play();
   document.body.innerHTML =
   "<h1 style='color:#b30000;text-align:center;margin-top:40vh;'>I LOVE YOU BABY 💕😘</h1>";
 }
