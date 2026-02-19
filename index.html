@@ -7,14 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
     
     <style>
-        :root {
-            --primary: #ff3366;
-            --glass: rgba(255, 255, 255, 0.05); /* Ultra-thin to show photo */
-        }
-
         body {
             margin: 0;
             height: 100vh;
+            /* Using your photo as the main background */
             background: url("myphoto.jpg") center/cover no-repeat;
             display: flex;
             flex-direction: column;
@@ -22,163 +18,155 @@
             align-items: center;
             font-family: 'Poppins', sans-serif;
             overflow: hidden;
-            padding-bottom: 80px;
+            padding-bottom: 60px;
         }
 
-        /* Subtle vignette to make text pop without hiding the photo */
-        body::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at center, transparent 20%, rgba(0,0,0,0.4) 100%);
-            z-index: 1;
-        }
-
+        /* Ensuring the photo is visible while text stays readable */
         .overlay {
             position: relative;
             z-index: 10;
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 40px;
-            border-radius: 30px;
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 25px;
+            border: 1px solid rgba(255,255,255,0.2);
             text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            width: 85%;
             max-width: 400px;
-            width: 90%;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
         }
 
         h1 {
             color: #fff;
-            font-size: 1.8rem;
-            margin-bottom: 30px;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
         }
 
         .buttons {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             justify-content: center;
             align-items: center;
-            min-height: 100px;
+            min-height: 80px;
         }
 
         button {
-            padding: 15px 35px;
-            font-size: 18px;
+            padding: 12px 30px;
+            font-size: 16px;
             font-weight: 700;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s;
+            transition: transform 0.1s ease; /* Faster response */
         }
 
         #yes {
-            background: var(--primary);
+            background: #ff3366;
             color: white;
-            box-shadow: 0 10px 25px rgba(255, 51, 102, 0.5);
-            position: relative;
-            z-index: 100;
+            z-index: 1000;
         }
 
         #no {
             background: white;
             color: #333;
-            position: fixed; /* Flies everywhere */
-            z-index: 99;
+            position: absolute; /* Changed to absolute within the scope */
+            z-index: 999;
+            transition: all 0.15s ease; /* Snappy movement */
         }
 
-        /* Heart Rain Styles */
+        /* Success Screen */
+        .success-screen {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: white;
+            text-align: center;
+        }
+
         .heart {
             position: fixed;
-            top: -10vh;
-            font-size: 2rem;
-            user-select: none;
-            z-index: 1000;
-            pointer-events: none;
+            top: -10%;
+            z-index: 10000;
             animation: fall linear forwards;
         }
 
         @keyframes fall {
             to { transform: translateY(110vh) rotate(360deg); }
         }
-
-        .success-screen {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.85);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            color: white;
-            text-align: center;
-            animation: fadeIn 1s ease-in;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div class="overlay" id="mainCard">
-    <h1>Sorry UXUUU BABY ❤️🥺</h1>
-    <div class="buttons">
+    <h1 id="question">Sorry UXUUU BABY ❤️🥺</h1>
+    <div class="buttons" id="buttonArea">
         <button id="yes" onclick="love()">YES ❤️</button>
-        <button id="no" onmouseover="escape()">NO 😏</button>
+        <button id="no" onmouseover="moveNo()">NO 😏</button>
     </div>
 </div>
 
-<audio id="song" loop>
+<audio id="mySong" preload="auto" loop>
     <source src="WhatsApp Audio 2026-02-19 at 9.03.41 PM.mpeg" type="audio/mpeg">
 </audio>
 
 <script>
     let yesScale = 1;
 
-    function escape() {
+    // The logic to move the NO button without hiding it
+    function moveNo() {
         const noBtn = document.getElementById("no");
         const yesBtn = document.getElementById("yes");
         
-        // Fly away
-        const x = Math.random() * (window.innerWidth - 100);
-        const y = Math.random() * (window.innerHeight - 50);
-        noBtn.style.left = x + 'px';
-        noBtn.style.top = y + 'px';
+        // Calculate random position within the visible window
+        const padding = 50;
+        const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding);
+        const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding);
+        
+        noBtn.style.position = "fixed";
+        noBtn.style.left = x + "px";
+        noBtn.style.top = y + "px";
 
-        // Make YES impossible to ignore
-        yesScale += 0.2;
+        // Make YES button grow to encourage clicking it
+        yesScale += 0.1;
         yesBtn.style.transform = `scale(${yesScale})`;
     }
 
     function createHeart() {
         const heart = document.createElement('div');
-        heart.innerHTML = ['❤️','💖','💕','💗'][Math.floor(Math.random()*4)];
+        heart.innerHTML = '❤️';
         heart.className = 'heart';
         heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
         heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        heart.style.opacity = Math.random();
         document.body.appendChild(heart);
         setTimeout(() => heart.remove(), 5000);
     }
 
     function love() {
-        const song = document.getElementById("song");
-        song.play().catch(() => {});
-        
-        // Start the rain
-        setInterval(createHeart, 100);
+        // Fix for Audio: Triggering play on the user's "Yes" click
+        const audio = document.getElementById("mySong");
+        audio.play().catch(error => {
+            console.log("Audio playback failed:", error);
+        });
 
-        // Show final message
-        document.body.innerHTML += `
-            <div class="success-screen">
-                <h1 style="font-size: 3.5rem; margin: 0;">I KNEW IT! 🥰</h1>
-                <p style="font-size: 1.5rem; opacity: 0.9;">I love you forever, Baby 💕💍</p>
-                <div style="font-size: 5rem; margin-top: 20px;">😘</div>
-            </div>
+        // Heart Rain
+        setInterval(createHeart, 150);
+
+        // Success message
+        const finalScreen = document.createElement('div');
+        finalScreen.className = 'success-screen';
+        finalScreen.innerHTML = `
+            <h1 style="font-size: 3rem;">I KNEW IT! 🥰</h1>
+            <p style="font-size: 1.5rem;">I love you forever! 💕💍</p>
         `;
+        document.body.appendChild(finalScreen);
     }
 </script>
 
