@@ -3,83 +3,84 @@
 <head>
 <meta charset="UTF-8">
 <title>Sorry UXUUU BABY ❤️</title>
+
 <style>
 body{
   margin:0;
   height:100vh;
-  background:linear-gradient(135deg,#ff9a9e,#fad0c4);
-  overflow:hidden;
+  background:url("myphoto.jpg") center/cover no-repeat;
   display:flex;
   justify-content:center;
   align-items:center;
-  font-family:'Arial',sans-serif;
+  font-family:Arial, sans-serif;
 }
 
-.container{
+.overlay{
+  background:rgba(255,255,255,0.7);
+  padding:40px;
+  border-radius:20px;
   text-align:center;
-  z-index:10;
 }
 
 h1{
-  font-size:48px;
   color:#b30000;
-  animation:pulse 2s infinite;
+  font-size:40px;
+  margin-bottom:20px;
+}
+
+.buttons{
+  display:flex;
+  gap:20px;
+  justify-content:center;
 }
 
 button{
-  margin-top:20px;
   padding:15px 30px;
   font-size:20px;
   border:none;
   border-radius:30px;
+  cursor:pointer;
+}
+
+#yes{
   background:#ff3366;
   color:white;
-  cursor:pointer;
-  box-shadow:0 8px 20px rgba(0,0,0,0.3);
 }
 
-button:hover{
-  background:#e6004c;
-}
-
-@keyframes pulse{
-  0%{transform:scale(1);}
-  50%{transform:scale(1.08);}
-  100%{transform:scale(1);}
-}
-
-.heart{
-  position:absolute;
-  font-size:26px;
-  animation:float 6s linear infinite;
-}
-
-@keyframes float{
-  0%{transform:translateY(100vh);}
-  100%{transform:translateY(-10vh);}
+#no{
+  background:#555;
+  color:white;
+  position:relative;
 }
 </style>
 </head>
 
 <body>
-<div class="container">
+
+<div class="overlay">
   <h1>Sorry UXUUU BABY ❤️🥺</h1>
-  <button onclick="alert('I Love You Forever 💖')">Forgive Me 😔</button>
+  <div class="buttons">
+    <button id="yes" onclick="love()">YES ❤️</button>
+    <button id="no" onmouseover="moveNo()">NO 😏</button>
+  </div>
 </div>
 
 <audio autoplay loop>
-  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+  <source src="https://open.spotify.com/track/1I31fccuIm50T5ZtWwBMJe?flow_ctx=57ecf962-5624-414a-8173-0a8002ba9f6c:1771540944&creation_point=https://open.spotify.com/track/1I31fccuIm50T5ZtWwBMJe#login?flow_ctx=57ecf962-5624-414a-8173-0a8002ba9f6c:1771540941">
 </audio>
 
 <script>
-for(let i=0;i<60;i++){
-  let heart=document.createElement("div");
-  heart.className="heart";
-  heart.innerHTML="❤️";
-  heart.style.left=Math.random()*100+"vw";
-  heart.style.animationDuration=(3+Math.random()*5)+"s";
-  document.body.appendChild(heart);
+function love(){
+  document.body.innerHTML =
+  "<h1 style='color:#b30000;text-align:center;margin-top:40vh;'>I LOVE YOU BABY 💕😘</h1>";
+}
+
+function moveNo(){
+  const btn = document.getElementById("no");
+  btn.style.left = Math.random()*200 - 100 + "px";
+  btn.style.top = Math.random()*200 - 100 + "px";
 }
 </script>
+
 </body>
 </html>
