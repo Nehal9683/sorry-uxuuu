@@ -2,15 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>For My Baby ❤️</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
     
     <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
             margin: 0;
             height: 100vh;
-            /* Using your photo as the main background */
             background: url("myphoto.jpg") center/cover no-repeat;
             display: flex;
             flex-direction: column;
@@ -18,69 +22,81 @@
             align-items: center;
             font-family: 'Poppins', sans-serif;
             overflow: hidden;
-            padding-bottom: 60px;
+            overscroll-behavior: none;
         }
 
-        /* Ensuring the photo is visible while text stays readable */
+        /* Gradient to keep the photo clear at the top */
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
+            z-index: 1;
+        }
+
         .overlay {
             position: relative;
             z-index: 10;
             background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            padding: 30px;
-            border-radius: 25px;
-            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            padding: 40px 20px;
+            border-radius: 40px 40px 0 0;
+            border: 1px solid rgba(255,255,255,0.15);
             text-align: center;
-            width: 85%;
-            max-width: 400px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 -15px 50px rgba(0,0,0,0.6);
+            padding-bottom: env(safe-area-inset-bottom, 40px);
         }
 
         h1 {
             color: #fff;
             font-size: 1.6rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+            margin-bottom: 30px;
+            font-weight: 700;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
-        .buttons {
+        .buttons-container {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             justify-content: center;
             align-items: center;
-            min-height: 80px;
+            min-height: 120px;
         }
 
         button {
-            padding: 12px 30px;
-            font-size: 16px;
-            font-weight: 700;
+            padding: 16px 45px;
+            font-size: 18px;
+            font-weight: 800;
             border: none;
-            border-radius: 50px;
+            border-radius: 100px;
             cursor: pointer;
-            transition: transform 0.1s ease; /* Faster response */
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            touch-action: none; /* Disables default touch zoom/scroll */
         }
 
         #yes {
             background: #ff3366;
             color: white;
-            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(255, 51, 102, 0.5);
+            z-index: 100;
         }
 
         #no {
             background: white;
             color: #333;
-            position: absolute; /* Changed to absolute within the scope */
-            z-index: 999;
-            transition: all 0.15s ease; /* Snappy movement */
+            position: relative;
+            z-index: 99;
+            /* Ultra-fast dodge transition */
+            transition: transform 0.1s ease-out, left 0.2s cubic-bezier(0.19, 1, 0.22, 1), top 0.2s cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        /* Success Screen */
-        .success-screen {
+        .success-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.92);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -88,13 +104,18 @@
             z-index: 9999;
             color: white;
             text-align: center;
+            padding: 20px;
+            animation: zoomIn 0.5s ease-out;
         }
 
-        .heart {
+        @keyframes zoomIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .heart-emoji {
             position: fixed;
             top: -10%;
             z-index: 10000;
             animation: fall linear forwards;
+            pointer-events: none;
         }
 
         @keyframes fall {
@@ -105,68 +126,83 @@
 <body>
 
 <div class="overlay" id="mainCard">
-    <h1 id="question">Sorry UXUUU BABY ❤️🥺</h1>
-    <div class="buttons" id="buttonArea">
+    <h1>Sorry UXUUU BABY ❤️🥺<br><span style="font-size: 0.9rem; font-weight: 400;">Can you forgive me?</span></h1>
+    <div class="buttons-container">
         <button id="yes" onclick="love()">YES ❤️</button>
-        <button id="no" onmouseover="moveNo()">NO 😏</button>
+        <button id="no" onmouseover="dodge()" ontouchstart="dodge()">NO 😏</button>
     </div>
 </div>
 
-<audio id="mySong" preload="auto" loop>
+<audio id="bgMusic" loop>
     <source src="WhatsApp Audio 2026-02-19 at 9.03.41 PM.mpeg" type="audio/mpeg">
 </audio>
 
 <script>
     let yesScale = 1;
 
-    // The logic to move the NO button without hiding it
-    function moveNo() {
+    function dodge() {
         const noBtn = document.getElementById("no");
         const yesBtn = document.getElementById("yes");
-        
-        // Calculate random position within the visible window
-        const padding = 50;
-        const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding);
-        const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding);
-        
-        noBtn.style.position = "fixed";
-        noBtn.style.left = x + "px";
-        noBtn.style.top = y + "px";
 
-        // Make YES button grow to encourage clicking it
-        yesScale += 0.1;
-        yesBtn.style.transform = `scale(${yesScale})`;
+        // Force fixed position on first touch
+        if (noBtn.style.position !== 'fixed') {
+            noBtn.style.position = 'fixed';
+        }
+
+        // Calculate a dodge position that stays within the viewport
+        const buttonWidth = noBtn.offsetWidth;
+        const buttonHeight = noBtn.offsetHeight;
+        
+        // Ensure it jumps at least 150px away
+        const safeMargin = 80;
+        const maxX = window.innerWidth - buttonWidth - safeMargin;
+        const maxY = window.innerHeight - buttonHeight - safeMargin;
+        
+        const randomX = Math.max(safeMargin, Math.floor(Math.random() * maxX));
+        const randomY = Math.max(safeMargin, Math.floor(Math.random() * maxY));
+
+        noBtn.style.left = randomX + 'px';
+        noBtn.style.top = randomY + 'px';
+
+        // Add a "panic" shake to the card
+        const card = document.getElementById("mainCard");
+        card.style.transform = "rotate(2deg)";
+        setTimeout(() => card.style.transform = "rotate(-2deg)", 50);
+        setTimeout(() => card.style.transform = "rotate(0deg)", 100);
+
+        // Make YES grow bigger
+        if (yesScale < 3) {
+            yesScale += 0.25;
+            yesBtn.style.transform = `scale(${yesScale})`;
+        }
     }
 
-    function createHeart() {
+    function spawnHeart() {
         const heart = document.createElement('div');
-        heart.innerHTML = '❤️';
-        heart.className = 'heart';
+        heart.innerHTML = ['❤️','💖','💕','💗'][Math.floor(Math.random()*4)];
+        heart.className = 'heart-emoji';
         heart.style.left = Math.random() * 100 + 'vw';
-        heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
-        heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        heart.style.fontSize = (Math.random() * 20 + 30) + 'px';
+        heart.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
         document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 5000);
+        setTimeout(() => heart.remove(), 4000);
     }
 
     function love() {
-        // Fix for Audio: Triggering play on the user's "Yes" click
-        const audio = document.getElementById("mySong");
-        audio.play().catch(error => {
-            console.log("Audio playback failed:", error);
-        });
+        const audio = document.getElementById("bgMusic");
+        audio.play().catch(e => console.log("Audio play error"));
 
-        // Heart Rain
-        setInterval(createHeart, 150);
+        setInterval(spawnHeart, 80);
 
-        // Success message
-        const finalScreen = document.createElement('div');
-        finalScreen.className = 'success-screen';
-        finalScreen.innerHTML = `
-            <h1 style="font-size: 3rem;">I KNEW IT! 🥰</h1>
-            <p style="font-size: 1.5rem;">I love you forever! 💕💍</p>
+        const success = document.createElement('div');
+        success.className = 'success-overlay';
+        success.innerHTML = `
+            <div style="font-size: 5rem; margin-bottom: 20px;">🥰</div>
+            <h1 style="font-size: 2.5rem; margin-bottom: 10px; color: #ff3366;">I KNEW IT!</h1>
+            <p style="font-size: 1.4rem; font-weight: 600;">I love you forever! 💕💍</p>
+            <button onclick="location.reload()" style="margin-top: 30px; background: transparent; border: 1px solid white; color: white; padding: 10px 20px; border-radius: 50px; font-size: 12px;">Reset</button>
         `;
-        document.body.appendChild(finalScreen);
+        document.body.appendChild(success);
     }
 </script>
 
