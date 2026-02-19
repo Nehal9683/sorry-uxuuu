@@ -3,124 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For You, My Love ❤️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>For My Baby ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --primary: #ff3366;
-            --glass: rgba(255, 255, 255, 0.15);
-            --border: rgba(255, 255, 255, 0.3);
+            --glass: rgba(255, 255, 255, 0.05); /* Ultra-thin to show photo */
         }
 
         body {
             margin: 0;
             height: 100vh;
-            /* Update the image path below */
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url("myphoto.jpg") center/cover no-repeat;
+            background: url("myphoto.jpg") center/cover no-repeat;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            justify-content: flex-end; 
             align-items: center;
             font-family: 'Poppins', sans-serif;
-            overflow: hidden; /* Prevents scrollbars during animations */
+            overflow: hidden;
+            padding-bottom: 80px;
         }
 
-        /* Animated Floating Hearts Background */
-        .heart-bg {
+        /* Subtle vignette to make text pop without hiding the photo */
+        body::before {
+            content: '';
             position: absolute;
-            top: -10%;
-            color: rgba(255, 255, 255, 0.3);
-            font-size: 20px;
-            user-select: none;
-            z-index: 0;
-            animation: float 10s linear infinite;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(110vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+            inset: 0;
+            background: radial-gradient(circle at center, transparent 20%, rgba(0,0,0,0.4) 100%);
+            z-index: 1;
         }
 
         .overlay {
             position: relative;
             z-index: 10;
             background: var(--glass);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 50px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 40px;
             border-radius: 30px;
-            border: 1px solid var(--border);
+            border: 1px solid rgba(255,255,255,0.1);
             text-align: center;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-            max-width: 90%;
-            transition: all 0.5s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            max-width: 400px;
+            width: 90%;
         }
 
         h1 {
             color: #fff;
-            font-size: clamp(1.5rem, 8vw, 2.5rem);
+            font-size: 1.8rem;
             margin-bottom: 30px;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
-            font-weight: 800;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
         .buttons {
             display: flex;
-            gap: 25px;
+            gap: 20px;
             justify-content: center;
             align-items: center;
-            flex-wrap: wrap;
+            min-height: 100px;
         }
 
         button {
-            padding: 18px 40px;
+            padding: 15px 35px;
             font-size: 18px;
-            font-weight: 600;
+            font-weight: 700;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s;
         }
 
         #yes {
             background: var(--primary);
             color: white;
-            box-shadow: 0 10px 20px rgba(255, 51, 102, 0.4);
-        }
-
-        #yes:hover {
-            transform: scale(1.1);
-            background: #ff1a53;
-            box-shadow: 0 15px 30px rgba(255, 51, 102, 0.6);
+            box-shadow: 0 10px 25px rgba(255, 51, 102, 0.5);
+            position: relative;
+            z-index: 100;
         }
 
         #no {
-            background: rgba(255, 255, 255, 0.9);
+            background: white;
             color: #333;
-            position: relative;
-            z-index: 5;
+            position: fixed; /* Flies everywhere */
+            z-index: 99;
         }
 
-        .success-content {
-            animation: heartBeat 1.5s infinite;
+        /* Heart Rain Styles */
+        .heart {
+            position: fixed;
+            top: -10vh;
+            font-size: 2rem;
+            user-select: none;
+            z-index: 1000;
+            pointer-events: none;
+            animation: fall linear forwards;
         }
 
-        @keyframes heartBeat {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
         }
+
+        .success-screen {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            color: white;
+            text-align: center;
+            animation: fadeIn 1s ease-in;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
-<div class="overlay" id="mainContainer">
-    <h1 id="heading">Sorry UXUUU BABY ❤️🥺</h1>
+<div class="overlay" id="mainCard">
+    <h1>Sorry UXUUU BABY ❤️🥺</h1>
     <div class="buttons">
         <button id="yes" onclick="love()">YES ❤️</button>
-        <button id="no" onmouseover="moveNo()">NO 😏</button>
+        <button id="no" onmouseover="escape()">NO 😏</button>
     </div>
 </div>
 
@@ -129,39 +136,49 @@
 </audio>
 
 <script>
-    // Create floating hearts automatically
-    function createHearts() {
-        const heart = document.createElement('div');
-        heart.classList.add('heart-bg');
-        heart.innerHTML = '❤️';
-        heart.style.left = Math.random() * 100 + 'vw';
-        heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 10000);
+    let yesScale = 1;
+
+    function escape() {
+        const noBtn = document.getElementById("no");
+        const yesBtn = document.getElementById("yes");
+        
+        // Fly away
+        const x = Math.random() * (window.innerWidth - 100);
+        const y = Math.random() * (window.innerHeight - 50);
+        noBtn.style.left = x + 'px';
+        noBtn.style.top = y + 'px';
+
+        // Make YES impossible to ignore
+        yesScale += 0.2;
+        yesBtn.style.transform = `scale(${yesScale})`;
     }
-    setInterval(createHearts, 500);
+
+    function createHeart() {
+        const heart = document.createElement('div');
+        heart.innerHTML = ['❤️','💖','💕','💗'][Math.floor(Math.random()*4)];
+        heart.className = 'heart';
+        heart.style.left = Math.random() * 100 + 'vw';
+        heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        heart.style.opacity = Math.random();
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+    }
 
     function love() {
         const song = document.getElementById("song");
-        song.play().catch(e => console.log("Audio requires interaction first"));
+        song.play().catch(() => {});
         
-        const container = document.getElementById("mainContainer");
-        container.classList.add('success-content');
-        container.innerHTML = `
-            <h1 style="color:#fff; margin:0;">I LOVE YOU FOREVER BABY 💕😘</h1>
-            <p style="color:white; margin-top:15px; opacity:0.8;">You just made my day!</p>
-        `;
-    }
+        // Start the rain
+        setInterval(createHeart, 100);
 
-    function moveNo() {
-        const btn = document.getElementById("no");
-        // Better random movement within the viewport
-        const x = Math.random() * (window.innerWidth - btn.offsetWidth);
-        const y = Math.random() * (window.innerHeight - btn.offsetHeight);
-        
-        btn.style.position = 'fixed';
-        btn.style.left = x + 'px';
-        btn.style.top = y + 'px';
+        // Show final message
+        document.body.innerHTML += `
+            <div class="success-screen">
+                <h1 style="font-size: 3.5rem; margin: 0;">I KNEW IT! 🥰</h1>
+                <p style="font-size: 1.5rem; opacity: 0.9;">I love you forever, Baby 💕💍</p>
+                <div style="font-size: 5rem; margin-top: 20px;">😘</div>
+            </div>
+        `;
     }
 </script>
 
